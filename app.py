@@ -20,6 +20,10 @@ def order():
     name = request.form.get("name").strip()
     product = request.form.get("product").strip()
     qty = request.form.get("quantity").strip()
+    message = request.form.get("message", "").strip()
+
+    # ✨ NEU: diese Zeile schreibt in die Render-Logs
+    print("Bestellung gespeichert:", name, email, product, qty)
 
     flash(f"Danke, {name}! Deine Bestellung ({qty}× {product}) ist eingegangen. 🐝", "success")
     return redirect(url_for("home") + "#order")
