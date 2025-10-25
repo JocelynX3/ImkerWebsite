@@ -1,4 +1,4 @@
-// Sanfter fliegende Bienen mit langsamer Bewegung
+// Sanft fliegende Bienen mit invertierter Scrollrichtung
 (function () {
   const layer = document.getElementById("bee-layer");
   if (!layer) return;
@@ -18,6 +18,7 @@
 
   function rand(a, b) { return Math.random() * (b - a) + a; }
 
+  // 🐝 Bienen initialisieren
   for (let i = 0; i < NUM_BEES; i++) {
     const el = document.createElement("div");
     el.className = "bee";
@@ -27,8 +28,8 @@
       el,
       x: rand(0, window.innerWidth),
       y: rand(0, window.innerHeight),
-      vx: rand(-0.06, 0.06),
-      vy: rand(-0.02, 0.02),
+      vx: rand(-0.03, 0.03), // viel langsamer
+      vy: rand(-0.01, 0.01),
       sway: rand(0.4, 1.0),
       rot: rand(0, 360)
     });
@@ -40,13 +41,18 @@
     lastScrollY = scrollY;
 
     for (const b of bees) {
-      b.vy += scrollDelta * 0.00025;
-      b.vx += (Math.random() - 0.5) * 0.01;
+      // 💡 Invertierte Scrollrichtung (Minuszeichen!)
+      b.vy -= scrollDelta * 0.0003;
 
-      b.x += b.vx * 8;
-      b.y += b.vy * 8 + Math.sin(performance.now() / 700 * b.sway) * 0.4;
-      b.rot += b.vx * 12;
+      // Leichte zufällige Bewegung
+      b.vx += (Math.random() - 0.5) * 0.005;
 
+      // Bewegung langsamer machen
+      b.x += b.vx * 4;
+      b.y += b.vy * 4 + Math.sin(performance.now() / 1000 * b.sway) * 0.5;
+      b.rot += b.vx * 8;
+
+      // Wenn Bienen aus dem Bildschirm fliegen → wieder reinholen
       if (b.x < -40) b.x = window.innerWidth + 20;
       if (b.x > window.innerWidth + 40) b.x = -20;
       if (b.y < -40) b.y = window.innerHeight + 20;
