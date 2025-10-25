@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+  <section id="home" class="section hero" style="--hero:url('{{ hero_url }}');">
+    <div class="hero-content">
+      <h1>Frischer Honig<br>vom Imker</h1>
+      <p>Natürlich. Regional. Direkt aus dem Bienenstock.</p>
+      <p><a class="btn" href="#order">Jetzt bestellen →</a></p>
+    </div>
+  </section>
+
+  <section id="why" class="section">
+    <h2>Warum Bienen wichtig sind</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Bestäubung</h3>
+        <p>Über 80 % unserer Nutzpflanzen hängen von der Bestäubung durch Bienen ab.</p>
+      </div>
+      <div class="card">
+        <h3>Artenvielfalt</h3>
+        <p>Bienen fördern gesunde Ökosysteme und sichern die Vielfalt der Pflanzenwelt.</p>
+      </div>
+      <div class="card">
+        <h3>Umweltindikatoren</h3>
+        <p>Geht es den Bienen gut, geht es auch unserer Umwelt gut – sie reagieren sensibel auf Veränderungen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="section">
+    <h2>Vom Bienenstock zum Honig</h2>
+    <ol class="steps">
+      <li><strong>1. Sammeln:</strong> Arbeiterinnen fliegen täglich Hunderte Blüten an, um Nektar zu sammeln.</li>
+      <li><strong>2. Veredeln:</strong> Durch Enzyme und Wärme wird der Nektar im Stock zu Honig verarbeitet.</li>
+      <li><strong>3. Reifung:</strong> Wenn der Honig den richtigen Wassergehalt hat, wird die Wabe verdeckelt.</li>
+      <li><strong>4. Ernte:</strong> Schonend geschleudert und naturbelassen abgefüllt.</li>
+    </ol>
+  </section>
+
+  <section id="order" class="section">
+    <h2>Honig bestellen</h2>
+    <form class="card form" method="post" action="{{ url_for('order') }}">
+      <div class="two">
+        <label>Name*<input name="name" required></label>
+        <label>E-Mail*<input type="email" name="email" required></label>
+      </div>
+      <label>Adresse*<input name="address" required placeholder="Straße, Hausnr., PLZ Ort"></label>
+      <div class="two">
+        <label>Sorte*
+          <select name="product" required>
+            <option value="Frühtracht">Frühtracht</option>
+            <option value="Sommertracht">Sommertracht</option>
+            <option value="Waldhonig">Waldhonig</option>
+            <option value="Lindenhonig">Lindenhonig</option>
+          </select>
+        </label>
+        <label>Menge (Gläser à 500g)*<input type="number" name="quantity" min="1" max="24" value="2" required></label>
+      </div>
+      <label>Nachricht (optional)
+        <textarea name="message" rows="4" placeholder="z. B. Abholung, Geschenkverpackung…"></textarea>
+      </label>
+      <button class="btn" type="submit">Verbindlich anfragen</button>
+      <p class="form-hint">Mit Absenden erklärst du dich mit der Verarbeitung deiner Angaben zur Bestellbearbeitung einverstanden.</p>
+    </form>
+  </section>
+{% endblock %}

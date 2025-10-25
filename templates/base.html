@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or "Honig vom Imker" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#home">🐝 Honig vom Imker</a>
+      <button id="menuBtn" class="menu-btn" aria-label="Menü öffnen" aria-controls="menuPanel" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <aside id="menuPanel" class="menu-panel" aria-hidden="true">
+    <nav class="menu-nav">
+      <a href="#home" class="menu-link">Start</a>
+      <a href="#why" class="menu-link">Warum Bienen?</a>
+      <a href="#process" class="menu-link">Vom Bienenstock zum Honig</a>
+      <a href="#order" class="menu-link">Honig bestellen</a>
+    </nav>
+  </aside>
+
+  <div id="bee-layer" aria-hidden="true"></div>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash">
+          {% for category, message in messages %}
+            <div class="flash-item {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>&copy; {{ 2025 }} Imkerei · Regional · Natürlich</small>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('menuBtn');
+      const panel = document.getElementById('menuPanel');
+      const openMenu = () => { panel.classList.add('open'); btn.setAttribute('aria-expanded','true'); panel.setAttribute('aria-hidden','false'); }
+      const closeMenu = () => { panel.classList.remove('open'); btn.setAttribute('aria-expanded','false'); panel.setAttribute('aria-hidden','true'); }
+      btn.addEventListener('click', () => panel.classList.contains('open') ? closeMenu() : openMenu());
+      panel.addEventListener('click', (e) => { if (e.target.classList.contains('menu-link') || e.target === panel) closeMenu(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    })();
+  </script>
+  <script src="{{ url_for('static', filename='bees.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or "Imkerei" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- Fixe Header-Leiste -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#home">🐝 Imkerei</a>
+      <button id="menuBtn" class="menu-btn" aria-label="Menü öffnen" aria-controls="menuPanel" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <!-- Overlay-Menü -->
+  <aside id="menuPanel" class="menu-panel" aria-hidden="true">
+    <nav class="menu-nav">
+      <a href="#home" class="menu-link">Start</a>
+      <a href="#why" class="menu-link">Warum Bienen?</a>
+      <a href="#how" class="menu-link">So entsteht Honig</a>
+      <a href="#order" class="menu-link">Honig bestellen</a>
+    </nav>
+  </aside>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash">
+          {% for category, message in messages %}
+            <div class="flash-item {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container"><small>&copy; {{ 2025 }} Imkerei Jenni · Regionaler Honig</small></div>
+  </footer>
+
+  <!-- Mini-JS: Menü + Bienen -->
+  <script>
+    (function(){
+      const btn = document.getElementById('menuBtn');
+      const panel = document.getElementById('menuPanel');
+      const openMenu = () => { panel.classList.add('open'); btn.setAttribute('aria-expanded','true'); panel.setAttribute('aria-hidden','false'); }
+      const closeMenu = () => { panel.classList.remove('open'); btn.setAttribute('aria-expanded','false'); panel.setAttribute('aria-hidden','true'); }
+      btn.addEventListener('click', () => panel.classList.contains('open') ? closeMenu() : openMenu());
+      panel.addEventListener('click', (e) => { if (e.target.classList.contains('menu-link') || e.target === panel) closeMenu(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+      // 🐝 einfache „fliegende Bienen“ beim Scrollen
+      const beeLayer = document.createElement('div');
+      beeLayer.className = 'bee-layer';
+      document.body.appendChild(beeLayer);
+
+      const bees = [];
+      const BEE_COUNT = 10;
+      for (let i=0;i<BEE_COUNT;i++){
+        const b = document.createElement('span');
+        b.className = 'bee';
+        b.textContent = '🐝';
+        b.style.left = Math.random()*100 + 'vw';
+        b.style.top  = Math.random()*100 + 'vh';
+        beeLayer.appendChild(b);
+        bees.push({el:b, vx:(Math.random()*0.6+0.2)*(Math.random()<.5?-1:1), vy:(Math.random()*0.4+0.1)*(Math.random()<.5?-1:1)});
+      }
+
+      let lastY = window.scrollY;
+      function tick(){
+        const dy = (window.scrollY - lastY) * 0.08; // Scroll beeinflusst Flugrichtung (leicht)
+        lastY = window.scrollY;
+        bees.forEach(b=>{
+          const el = b.el;
+          let x = el.offsetLeft, y = el.offsetTop;
+          x += b.vx*2 + dy;
+          y += b.vy*2 + Math.sin(Date.now()/300 + x)*0.5;
+          // Wrap an den Rändern
+          if (x < -40) x = window.innerWidth + 20;
+          if (x > window.innerWidth + 40) x = -20;
+          if (y < -40) y = window.innerHeight + 20;
+          if (y > window.innerHeight + 40) y = -20;
+          el.style.transform = `translate(${x - el.offsetLeft}px, ${y - el.offsetTop}px)`;
+        });
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>
