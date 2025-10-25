@@ -73,5 +73,5 @@ p{line-height:1.6}
 .footer .container{padding:1rem;color:var(--muted)}
 
 /* Bee-Layer */
-#bee-layer{position:fixed;inset:0;pointer-events:none;z-index:900}
-.bee{position:absolute;width:28px;height:28px;opacity:.95;will-change:transform}
+#bee-layer { position: fixed; inset: 0; pointer-events: none; z-index: 900; }
+.bee       { position: absolute; width: 40px; height: auto; opacity: .95; will-change: transform;

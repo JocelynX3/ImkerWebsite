@@ -23,7 +23,10 @@
     </nav>
   </aside>
 
-  <div id="bee-layer" aria-hidden="true"></div>
+  <div id="bee-layer"
+     aria-hidden="true"
+     data-bee-src="{{ url_for('static', filename='img/bee.png') }}">
+  </div>
 
   <main class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
