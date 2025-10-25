@@ -1,116 +1,116 @@
-// 🐝 Ruhige Bienen: sanftes Fliegen + invertierter Scroll-Impuls + stabile Dämpfung
+// 🐝 Natürlicher Dauerflug + sanfter, invertierter Scroll-Impuls
 (function () {
   const layer = document.getElementById("bee-layer");
   if (!layer) return;
 
   const beeSrc = layer.getAttribute("data-bee-src") || "/static/img/bee.png";
-  const NUM_BEES = 12;               // etwas weniger = ruhiger
-  const SPEED_PX_S = 40;             // Grundgeschwindigkeit (Pixel pro Sekunde)
-  const MAX_V = 0.25;                // Max. Basisgeschwindigkeit (px/frame in vNorm)
-  const SCROLL_IMP_LIMIT = 400;      // Begrenzung des Impulses
-  const NOISE = 0.001;               // sehr wenig Zufallsrauschen
+
+  // ---- Feintuning ----
+  const NUM_BEES = 12;          // Anzahl Bienen
+  const BASE_SPEED = 28;        // Grundgeschwindigkeit (px/s)
+  const SCROLL_TO_IMPULSE = 0.5;// wie stark ein Scroll (dy) in Impuls umgesetzt wird
+  const IMPULSE_DECAY = 0.90;   // wie schnell der Impuls ausklingt pro Sekunde (0.90 = schnell)
+  const H_SWAY_MIN = 18, H_SWAY_MAX = 36;  // horizontale Wellenamplitude (px)
+  const V_SWAY = 10;            // vertikale Wellenamplitude (px)
+  const NOISE = 4;              // sehr wenig zufällige Unruhe (px/s)
+  const PAD = 60;               // Randpuffer für Wrap
 
   const bees = [];
   let lastY = window.scrollY;
-  let scrollImpulse = 0;
-  let lastTs = null;
-  let running = true;
+  let impulseY = 0;             // kumulierter vertikaler Impuls (px/s)
+  let lastTs = performance.now();
 
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const rand = (a, b) => Math.random() * (b - a) + a;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-  // Bild erst laden, dann Bienen erzeugen → verhindert „Zucken“
-  const sprite = new Image();
-  sprite.src = beeSrc;
-  sprite.onload = () => {
-    for (let i = 0; i < NUM_BEES; i++) {
-      const img = document.createElement("img");
-      img.src = beeSrc;
-      img.alt = "";
-      img.className = "bee";
-      layer.appendChild(img);
+  // Bienen erzeugen (als <img>)
+  for (let i = 0; i < NUM_BEES; i++) {
+    const img = document.createElement("img");
+    img.src = beeSrc;
+    img.alt = "";
+    img.className = "bee";
+    layer.appendChild(img);
 
-      bees.push({
-        el: img,
-        x: rand(0, window.innerWidth),
-        y: rand(0, window.innerHeight),
-        vx: rand(-0.03, 0.03),
-        vy: rand(-0.02, 0.02),
-        swaySpeed: rand(0.6, 1.0),     // 0.6–1.0 Hz
-        swayRange: rand(10, 22),       // 10–22 px Amplitude
-        swayPhase: rand(0, Math.PI * 2),
-        rot: rand(-6, 6)
-      });
-    }
-    requestAnimationFrame(tick);
-  };
+    bees.push({
+      el: img,
+      // Startposition
+      x: rand(0, window.innerWidth),
+      y: rand(0, window.innerHeight),
+      // individueller Grundkurs (Richtung)
+      dir: rand(0, Math.PI * 2),
+      speed: BASE_SPEED * rand(0.8, 1.25),
+      // seitliche Wellenbewegung
+      swayA: rand(H_SWAY_MIN, H_SWAY_MAX),
+      swayF: rand(0.3, 0.7),             // Hz
+      phase: rand(0, Math.PI * 2),
+      rot: rand(-8, 8)
+    });
+  }
 
-  // invertierter Scroll-Impuls: runter scrollen → Bienen nach oben
+  // Scroll: invertierter Impuls (runter scrollen -> Bienen nach oben)
   function onScroll() {
     const y = window.scrollY;
-    const dy = y - lastY;            // >0 = runter gescrollt
+    const dy = y - lastY;  // >0 = nach unten gescrollt
     lastY = y;
-    scrollImpulse -= dy * 0.45;      // Stärke (kleiner = sanfter)
-    scrollImpulse = clamp(scrollImpulse, -SCROLL_IMP_LIMIT, SCROLL_IMP_LIMIT);
+    impulseY -= dy * SCROLL_TO_IMPULSE; // invertiert
+    // harte Begrenzung gegen Ausreißer
+    impulseY = clamp(impulseY, -600, 600);
   }
+  window.addEventListener("scroll", onScroll, { passive: true });
 
-  // pausiere Animation, wenn Tab/Window nicht sichtbar (stabiler, sparsamer)
-  document.addEventListener("visibilitychange", () => {
-    running = !document.hidden;
-    lastTs = null;                   // dt neu starten, sonst Sprung
-    if (running) requestAnimationFrame(tick);
-  });
+  // Animation
+  function tick() {
+    const now = performance.now();
+    const dt = Math.min((now - lastTs) / 1000, 0.05); // Sekunden, max 50ms
+    lastTs = now;
+    const t = now / 1000;
 
-  function tick(ts) {
-    if (!running) return;
-    if (lastTs == null) lastTs = ts;
-    const dt = Math.min((ts - lastTs) / 1000, 0.05); // Sekunden; clamp auf 50 ms
-    lastTs = ts;
-
-    // Impuls langsam ausklingen lassen (zeitbasiert)
-    scrollImpulse *= Math.pow(0.9, dt * 60); // ~0.9 pro 60 FPS
-
-    const t = ts / 1000;
+    // Impuls zeitbasiert ausklingen lassen
+    const decay = Math.pow(IMPULSE_DECAY, dt * 60);
+    impulseY *= decay;
 
     for (const b of bees) {
-      // kleines Rauschen (sehr sanft)
-      b.vx += (Math.random() - 0.5) * NOISE;
-      b.vy += (Math.random() - 0.5) * NOISE;
+      // Grundbewegung entlang eines Kurses
+      const baseVX = Math.cos(b.dir) * b.speed; // px/s
+      const baseVY = Math.sin(b.dir) * b.speed; // px/s
 
-      // Scroll-Impuls wirkt vertikal (sehr dezent)
-      b.vy += (scrollImpulse * 0.006) * dt;
+      // sanftes seitliches Schweben + leichtes vertikales Wippen
+      const waveX = Math.sin(t * 2 * Math.PI * b.swayF + b.phase) * b.swayA; // px
+      const waveY = Math.cos(t * 2 * Math.PI * (b.swayF * 0.8) + b.phase) * V_SWAY; // px
 
-      // Geschwindigkeiten begrenzen & leicht dämpfen
-      b.vx = clamp(b.vx * (1 - 0.04 * dt * 60), -MAX_V, MAX_V);
-      b.vy = clamp(b.vy * (1 - 0.04 * dt * 60), -MAX_V, MAX_V);
+      // sehr dezentes Rauschen (Zufallsdrift)
+      const noiseVX = (Math.random() - 0.5) * NOISE; // px/s
+      const noiseVY = (Math.random() - 0.5) * NOISE; // px/s
 
-      // Seitliche Welle (ruhig)
-      const waveX = Math.sin(t * b.swaySpeed + b.swayPhase) * (b.swayRange * 0.04);
+      // Scroll-Impuls wirkt vertikal (px/s)
+      const impulseVY = impulseY;
 
-      // Positionsupdate (zeitbasiert → überall gleich schnell)
-      b.x += (b.vx * SPEED_PX_S + waveX) * dt;
-      b.y += (b.vy * SPEED_PX_S + Math.sin(t * 2 * b.swaySpeed) * 2) * dt;
-      b.rot += b.vx * 30 * dt;
+      // Positionsupdate (px/s -> px per frame: * dt)
+      b.x += (baseVX + noiseVX) * dt + waveX * 0.02; // waveX als kleine Drift
+      b.y += (baseVY + noiseVY + impulseVY) * dt + waveY * 0.02;
+
+      // leichte Rotation nach horizontaler Bewegung
+      b.rot += (baseVX + noiseVX) * 0.02 * dt;
 
       // Bildschirm-Wrap
-      const pad = 60;
-      if (b.x < -pad) b.x = window.innerWidth + pad / 2;
-      if (b.x > window.innerWidth + pad) b.x = -pad / 2;
-      if (b.y < -pad) b.y = window.innerHeight + pad / 2;
-      if (b.y > window.innerHeight + pad) b.y = -pad / 2;
+      if (b.x < -PAD) b.x = window.innerWidth + PAD / 2;
+      if (b.x > window.innerWidth + PAD) b.x = -PAD / 2;
+      if (b.y < -PAD) b.y = window.innerHeight + PAD / 2;
+      if (b.y > window.innerHeight + PAD) b.y = -PAD / 2;
 
       b.el.style.transform =
-        `translate(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px) rotate(${b.rot.toFixed(1)}deg)`;
+        `translate(${b.x.toFixed(1)}px, ${b.y.toFixed(1)}px) rotate(${b.rot.toFixed(2)}deg)`;
     }
 
     requestAnimationFrame(tick);
   }
+  requestAnimationFrame(tick);
 
-  window.addEventListener("scroll", onScroll, { passive: true });
+  // Resizing: Positionen im Bildschirm halten
   window.addEventListener("resize", () => {
     for (const b of bees) {
-      b.x = Math.min(Math.max(b.x, -30), window.innerWidth + 30);
-      b.y = Math.min(Math.max(b.y, -30), window.innerHeight + 30);
+      b.x = clamp(b.x, -PAD, window.innerWidth + PAD);
+      b.y = clamp(b.y, -PAD, window.innerHeight + PAD);
     }
   });
 })();
