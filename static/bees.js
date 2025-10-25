@@ -8,8 +8,8 @@
   // ---- Feintuning ----
   const NUM_BEES = 12;          // Anzahl Bienen
   const BASE_SPEED = 28;        // Grundgeschwindigkeit (px/s)
-  const SCROLL_TO_IMPULSE = 0.5;// wie stark ein Scroll (dy) in Impuls umgesetzt wird
-  const IMPULSE_DECAY = 0.90;   // wie schnell der Impuls ausklingt pro Sekunde (0.90 = schnell)
+  const SCROLL_TO_IMPULSE = 1;// wie stark ein Scroll (dy) in Impuls umgesetzt wird
+  const IMPULSE_DECAY = 0.5;   // wie schnell der Impuls ausklingt pro Sekunde (0.90 = schnell)
   const H_SWAY_MIN = 18, H_SWAY_MAX = 36;  // horizontale Wellenamplitude (px)
   const V_SWAY = 10;            // vertikale Wellenamplitude (px)
   const NOISE = 4;              // sehr wenig zufällige Unruhe (px/s)
