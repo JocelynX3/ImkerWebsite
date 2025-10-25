@@ -17,12 +17,15 @@ def order():
         flash("Bitte alle Pflichtfelder ausfüllen.", "error")
         return redirect(url_for("home") + "#order")
 
+    # 👉 Diese Zeilen lesen die Felder aus dem Formular aus
     name = request.form.get("name").strip()
+    email = request.form.get("email").strip()     # <--- war bei dir wahrscheinlich gefehlt!
+    address = request.form.get("address").strip()
     product = request.form.get("product").strip()
     qty = request.form.get("quantity").strip()
     message = request.form.get("message", "").strip()
 
-    # ✨ NEU: diese Zeile schreibt in die Render-Logs
+    # 👉 Debug-Ausgabe (wird in Render-Logs angezeigt)
     print("Bestellung gespeichert:", name, email, product, qty)
 
     flash(f"Danke, {name}! Deine Bestellung ({qty}× {product}) ist eingegangen. 🐝", "success")
