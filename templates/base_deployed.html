@@ -7,19 +7,13 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <!-- HEADER -->
   <header class="nav">
     <div class="container nav-inner">
-      <!-- Logo statt Text -->
-      <a class="brand" href="#home" aria-label="Zur Startseite">
-        <img src="{{ url_for('static', filename='img/honeypot.png') }}" alt="Honig vom Imker" class="logo-img">
-      </a>
-
+      <a class="brand" href="#home">🐝 Honig vom Imker</a>
       <button id="menuBtn" class="menu-btn" aria-label="Menü öffnen" aria-controls="menuPanel" aria-expanded="false">☰</button>
     </div>
   </header>
 
-  <!-- MENÜOVERLAY -->
   <aside id="menuPanel" class="menu-panel" aria-hidden="true">
     <nav class="menu-nav">
       <a href="#home" class="menu-link">Start</a>
@@ -29,10 +23,8 @@
     </nav>
   </aside>
 
-  <!-- BEE-LAYER -->
   <div id="bee-layer" data-bee-src="{{ url_for('static', filename='img/bee.png') }}"></div>
 
-  <!-- CONTENT -->
   <main class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -47,14 +39,12 @@
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <small>&copy; {{ 2025 }} Imkerei · Regional · Natürlich</small>
     </div>
   </footer>
 
-  <!-- MENÜ LOGIK -->
   <script>
     (function () {
       const btn = document.getElementById('menuBtn');
@@ -66,36 +56,6 @@
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
     })();
   </script>
-
-  <!-- Bienen -->
   <script src="{{ url_for('static', filename='bees.js') }}"></script>
-
-  <!-- 🌄 Parallax-Hintergrund (streifenfrei via ::before) -->
-  <script>
-    (function(){
-      const factor = -0.05;  // Bewegung entgegen der Scrollrichtung
-      const smooth = 0.1;    // weiches Nachziehen
-      let target = 0, current = 0;
-
-      function onScroll() {
-        // Begrenzen ist nicht mehr kritisch, weil ::before Bleed hat,
-        // wir halten es aber moderat für sanftes Gefühl
-        target = window.scrollY * factor;
-      }
-      window.addEventListener("scroll", onScroll, {passive:true});
-      onScroll();
-
-      function raf() {
-        current += (target - current) * smooth;
-        // setzt die Y-Verschiebung für body::before
-        document.documentElement.style.setProperty('--bg-shift', current.toFixed(1) + 'px');
-        requestAnimationFrame(raf);
-      }
-      raf();
-
-      // Auf Resize neu berechnen
-      window.addEventListener("resize", onScroll);
-    })();
-  </script>
 </body>
 </html>

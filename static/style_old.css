@@ -1,14 +1,11 @@
 :root{
   --bg:#FFF9E6;
   --fg:#2F2A1F;
-  --brand:#FFC000;
-  --brand-3:#E6AC00;
+  --brand:#FFC000;     /* Hauptfarbe der Buttons */
+  --brand-3:#E6AC00;   /* dunklerer Ton beim Hover */
   --border:#F1C97A;
   --muted:#6B5E40;
   --card:#FFFFFF;
-
-  /* Parallax-Shift (wird per JS gesetzt) */
-  --bg-shift: 0px;
 }
 
 *{box-sizing:border-box}
@@ -17,43 +14,23 @@ html,body{
   color:var(--fg);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   scroll-behavior:smooth;
-  min-height:100%;
 }
 
-/* 🌄 Vollflächiger, streifenfreier Seitenhintergrund via Pseudo-Element */
-body{
-  position: relative; /* für z-index-Stacking-Kontext */
-  background-color: var(--bg); /* Fallback-Farbe falls Bild nicht lädt */
+/* 🖼️ Globaler Hintergrund (Hero-Bild überall) */
+body {
+  background-image: url("/static/img/background.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Parallax-Effekt */
 }
 
-/* Der eigentliche Hintergrund: fixiert, mit Bleed über den Viewportrand hinaus */
-body::before{
-  content:"";
-  position: fixed;
-  /* Bleed: überragt den Viewport rundherum → keine Kanten sichtbar */
-  inset: -12vh;         /* 12% Viewport-Rand extra in alle Richtungen */
-  z-index: -1;
-  pointer-events: none;
-  will-change: transform;
-
-  /* Verlauf (oben → unten heller) über dem Bild */
-  background-image:
-    linear-gradient(to bottom, rgba(255,249,230,0.15), rgba(255,249,230,0.9) 90%),
-    url("/static/img/background.png");
-  background-repeat: no-repeat, no-repeat;
-  background-size: cover, cover;
-  background-position: center, center;
-
-  /* Parallax-Verschiebung (nur Y), kommt aus --bg-shift */
-  transform: translate3d(0, var(--bg-shift), 0);
-}
-
-/* Grundstruktur */
+/* Layout-Grundstruktur */
 .container{max-width:1000px;margin:0 auto;padding:1rem}
 .section{
   padding:4rem 0;
   scroll-margin-top:84px;
-  background-color: rgba(255, 249, 230, 0.85);
+  background-color: rgba(255, 249, 230, 0.85); /* leicht transparent über Hintergrund */
   border-radius: 12px;
 }
 h1,h2,h3{margin:0 0 .6rem}
@@ -67,6 +44,7 @@ p{line-height:1.6}
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between}
 
+/* Brand jetzt als Logo-Bild */
 .brand{display:inline-flex;align-items:center;text-decoration:none}
 .logo-img{height:48px;width:auto;display:block}
 @media (max-width:520px){ .logo-img{height:40px} }
@@ -85,11 +63,9 @@ p{line-height:1.6}
 .menu-panel.open{opacity:1;pointer-events:auto}
 .menu-nav{
   position:absolute;top:12px;right:12px;width:230px;background:#fff;
-  border:1px solid var(--border);border-radius:14px;
-  box-shadow:0 12px 32px rgba(0,0,0,.1);padding:.5rem
+  border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.1);padding:.5rem
 }
-.menu-link{display:block;padding:.75rem .9rem;border-radius:10px;
-  color:var(--fg);text-decoration:none}
+.menu-link{display:block;padding:.75rem .9rem;border-radius:10px;color:var(--fg);text-decoration:none}
 .menu-link:hover{background:#FFF0B8}
 
 /* Hero */
@@ -99,21 +75,20 @@ p{line-height:1.6}
   border-radius:16px;
   overflow:hidden;
   background-size:cover;
-  background-position:center center;
+  background-position:center center; /* stärker zentriert */
   background-image:var(--hero);
   border:1px solid var(--border);
 }
 .hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
+  content:"";position:absolute;inset:0;
+  /* transparenter: Hintergrund scheint mehr durch */
   background:linear-gradient(to bottom,rgba(255,240,180,.45),rgba(255,249,230,.85) 80%);
 }
 .hero .hero-content{
   position:relative;z-index:1;max-width:760px;margin:0 auto;text-align:center
 }
 
-/* Logo & Text im Hero */
+/* Neues Logo & Text im Hero */
 .hero-logo {
   width: 180px;
   height: auto;
@@ -125,8 +100,9 @@ p{line-height:1.6}
   font-size: clamp(1.4rem, 3.5vw, 2.2rem);
   line-height: 1.1;
   margin-bottom: 0.5rem;
-  white-space: nowrap;
+  white-space: nowrap; /* alles in eine Zeile */
 }
+/* br im H1 ausblenden, damit wirklich eine Zeile entsteht */
 .hero h1 br { display:none; }
 
 .hero-sub {
@@ -153,10 +129,9 @@ p{line-height:1.6}
 }
 
 /* Grid & Cards */
-.grid{display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
 .card{
-  background:rgba(255,255,255,0.9);
+  background:rgba(255,255,255,0.9); /* leicht transparent, Hintergrund sichtbar */
   border:1px solid var(--border);
   border-radius:14px;
   padding:1rem;

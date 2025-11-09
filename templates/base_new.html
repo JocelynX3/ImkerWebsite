@@ -10,9 +10,9 @@
   <!-- HEADER -->
   <header class="nav">
     <div class="container nav-inner">
-      <!-- Logo statt Text -->
+      <!-- Logo -->
       <a class="brand" href="#home" aria-label="Zur Startseite">
-        <img src="{{ url_for('static', filename='img/honeypot.png') }}" alt="Honig vom Imker" class="logo-img">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="" class="logo-img">
       </a>
 
       <button id="menuBtn" class="menu-btn" aria-label="Menü öffnen" aria-controls="menuPanel" aria-expanded="false">☰</button>
@@ -70,30 +70,31 @@
   <!-- Bienen -->
   <script src="{{ url_for('static', filename='bees.js') }}"></script>
 
-  <!-- 🌄 Parallax-Hintergrund (streifenfrei via ::before) -->
+  <!-- 🌄 Parallax-Hintergrund für background.png -->
   <script>
     (function(){
       const factor = -0.05;  // Bewegung entgegen der Scrollrichtung
-      const smooth = 0.1;    // weiches Nachziehen
+      const smooth = 0.1;    // Übergangsgeschwindigkeit
       let target = 0, current = 0;
 
+      function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
       function onScroll() {
-        // Begrenzen ist nicht mehr kritisch, weil ::before Bleed hat,
-        // wir halten es aber moderat für sanftes Gefühl
-        target = window.scrollY * factor;
+        // Maximal 20% der Viewport-Höhe verschieben → kein Weißrand
+        const max = window.innerHeight * 0.20;
+        target = clamp(window.scrollY * factor, -max, max);
       }
       window.addEventListener("scroll", onScroll, {passive:true});
       onScroll();
 
-      function raf() {
+      function animate() {
         current += (target - current) * smooth;
-        // setzt die Y-Verschiebung für body::before
-        document.documentElement.style.setProperty('--bg-shift', current.toFixed(1) + 'px');
-        requestAnimationFrame(raf);
+        // Verschiebt nur die 2. Hintergrundebene (Bild)
+        document.body.style.backgroundPosition = `center top, center ${current.toFixed(1)}px`;
+        requestAnimationFrame(animate);
       }
-      raf();
+      animate();
 
-      // Auf Resize neu berechnen
       window.addEventListener("resize", onScroll);
     })();
   </script>

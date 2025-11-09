@@ -6,9 +6,6 @@
   --border:#F1C97A;
   --muted:#6B5E40;
   --card:#FFFFFF;
-
-  /* Parallax-Shift (wird per JS gesetzt) */
-  --bg-shift: 0px;
 }
 
 *{box-sizing:border-box}
@@ -17,35 +14,23 @@ html,body{
   color:var(--fg);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   scroll-behavior:smooth;
-  min-height:100%;
+  min-height:100%; /* wichtig: für Vollflächigkeit */
 }
 
-/* 🌄 Vollflächiger, streifenfreier Seitenhintergrund via Pseudo-Element */
-body{
-  position: relative; /* für z-index-Stacking-Kontext */
-  background-color: var(--bg); /* Fallback-Farbe falls Bild nicht lädt */
-}
-
-/* Der eigentliche Hintergrund: fixiert, mit Bleed über den Viewportrand hinaus */
-body::before{
-  content:"";
-  position: fixed;
-  /* Bleed: überragt den Viewport rundherum → keine Kanten sichtbar */
-  inset: -12vh;         /* 12% Viewport-Rand extra in alle Richtungen */
-  z-index: -1;
-  pointer-events: none;
-  will-change: transform;
-
-  /* Verlauf (oben → unten heller) über dem Bild */
+/* 🌄 Globaler Seitenhintergrund – background.png + sanfter Verlauf nach unten */
+body {
   background-image:
     linear-gradient(to bottom, rgba(255,249,230,0.15), rgba(255,249,230,0.9) 90%),
     url("/static/img/background.png");
   background-repeat: no-repeat, no-repeat;
-  background-size: cover, cover;
-  background-position: center, center;
 
-  /* Parallax-Verschiebung (nur Y), kommt aus --bg-shift */
-  transform: translate3d(0, var(--bg-shift), 0);
+  /* cover stellt sicher, dass das Bild immer den gesamten Hintergrund füllt */
+  background-size: cover, cover;
+  background-position: center top, center 0px;
+  background-attachment: scroll, scroll;
+
+  /* Fallback-Farbe, falls Bild nicht geladen wird */
+  background-color: var(--bg);
 }
 
 /* Grundstruktur */

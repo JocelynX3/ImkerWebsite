@@ -6,7 +6,7 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-change-me")
 
 @app.get("/")
 def home():
-    hero_url = url_for("static", filename="img/hero.png")
+    hero_url = url_for("static", filename="img/hero.jpg")
     return render_template("index.html", title="Honig vom Imker", hero_url=hero_url)
 
 @app.post("/order")

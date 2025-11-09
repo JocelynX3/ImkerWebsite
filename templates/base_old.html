@@ -69,33 +69,5 @@
 
   <!-- Bienen -->
   <script src="{{ url_for('static', filename='bees.js') }}"></script>
-
-  <!-- 🌄 Parallax-Hintergrund (streifenfrei via ::before) -->
-  <script>
-    (function(){
-      const factor = -0.05;  // Bewegung entgegen der Scrollrichtung
-      const smooth = 0.1;    // weiches Nachziehen
-      let target = 0, current = 0;
-
-      function onScroll() {
-        // Begrenzen ist nicht mehr kritisch, weil ::before Bleed hat,
-        // wir halten es aber moderat für sanftes Gefühl
-        target = window.scrollY * factor;
-      }
-      window.addEventListener("scroll", onScroll, {passive:true});
-      onScroll();
-
-      function raf() {
-        current += (target - current) * smooth;
-        // setzt die Y-Verschiebung für body::before
-        document.documentElement.style.setProperty('--bg-shift', current.toFixed(1) + 'px');
-        requestAnimationFrame(raf);
-      }
-      raf();
-
-      // Auf Resize neu berechnen
-      window.addEventListener("resize", onScroll);
-    })();
-  </script>
 </body>
 </html>
