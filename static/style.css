@@ -48,14 +48,14 @@ body::before{
   transform: translate3d(0, var(--bg-shift), 0);
 }
 
-/* Grundstruktur */
+/* Layout-Grundstruktur */
 .container{max-width:1000px;margin:0 auto;padding:1rem}
 .section{
   padding:4rem 0;
   scroll-margin-top:84px;
   background-color: rgba(255, 249, 230, 0.85);
   border-radius: 12px;
-  margin-bottom: 1cm;   /* ✅ neuer Abstand zwischen den Abschnitten */
+  margin-bottom: 1cm;   /* 1 cm Abstand zwischen Abschnitten */
 }
 h1,h2,h3{margin:0 0 .6rem}
 p{line-height:1.6}
@@ -63,11 +63,12 @@ p{line-height:1.6}
 /* Header */
 .nav{
   position:sticky;top:0;z-index:1000;
-  background:linear-gradient(90deg,#FFF6D6,#FFBB44);
+  background:linear-gradient(90deg,#FFF6D6,#F4BB44);
   border-bottom:1px solid var(--border)
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between}
 
+/* Brand jetzt als Logo-Bild */
 .brand{display:inline-flex;align-items:center;text-decoration:none}
 .logo-img{height:48px;width:auto;display:block}
 @media (max-width:520px){ .logo-img{height:40px} }
@@ -86,40 +87,23 @@ p{line-height:1.6}
 .menu-panel.open{opacity:1;pointer-events:auto}
 .menu-nav{
   position:absolute;top:12px;right:12px;width:230px;background:#fff;
-  border:1px solid var(--border);border-radius:14px;
-  box-shadow:0 12px 32px rgba(0,0,0,.1);padding:.5rem
+  border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.1);padding:.5rem
 }
-.menu-link{display:block;padding:.75rem .9rem;border-radius:10px;
-  color:var(--fg);text-decoration:none}
+.menu-link{display:block;padding:.75rem .9rem;border-radius:10px;color:var(--fg);text-decoration:none}
 .menu-link:hover{background:#FFF0B8}
 
 /* Hero */
 .hero{
-  position:relative;
-  padding:8rem 0 6rem;
-  border-radius:16px;
-  overflow:hidden;
-  background-size:cover;
-  background-position:center center;
-  background-image:var(--hero);
+  position:relative;padding:8rem 0 6rem;border-radius:16px;overflow:hidden;
+  background-size:cover;background-position:center center;background-image:var(--hero);
   border:1px solid var(--border);
 }
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom,rgba(255,240,180,.45),rgba(255,249,230,.85) 80%);
-}
-.hero .hero-content{
-  position:relative;z-index:1;max-width:760px;margin:0 auto;text-align:center
-}
+.hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(255,240,180,.45),rgba(255,249,230,.85) 80%)}
+.hero .hero-content{position:relative;z-index:1;max-width:760px;margin:0 auto;text-align:center}
 
 /* Logo & Text im Hero */
-.hero-logo {
-  width: 180px;
-  height: auto;
-  margin-bottom: 1.5rem;
-}
+.hero-logo { width: 180px; height: auto; margin-bottom: 1.5rem; }
 
 /* kleiner & einzeilig */
 .hero h1 {
@@ -130,39 +114,20 @@ p{line-height:1.6}
 }
 .hero h1 br { display:none; }
 
-.hero-sub {
-  font-size: 1.1rem;
-  color: var(--muted);
-  margin-bottom: 1.2rem;
-}
+.hero-sub { font-size: 1.1rem; color: var(--muted); margin-bottom: 1.2rem; }
 
 /* Buttons */
 .btn{
-  display:inline-block;
-  background:var(--brand);
-  color:#2B1E0A;
-  text-decoration:none;
-  padding:.75rem 1rem;
-  border-radius:12px;
-  border:1px solid #E9B44E;
-  font-weight:700;
+  display:inline-block;background:var(--brand);color:#2B1E0A;text-decoration:none;
+  padding:.75rem 1rem;border-radius:12px;border:1px solid #E9B44E;font-weight:700;
   transition:background-color .15s ease-in-out;
 }
-.btn:hover{
-  background:var(--brand-3);
-  color:#1F1406;
-}
+.btn:hover{background:var(--brand-3);color:#1F1406}
 
 /* Grid & Cards */
-.grid{display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
-.card{
-  background:rgba(255,255,255,0.9);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:1rem;
-  box-shadow:0 6px 16px rgba(191,148,63,.1)
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.card{background:rgba(255,255,255,0.9);border:1px solid var(--border);border-radius:14px;padding:1rem;
+  box-shadow:0 6px 16px rgba(191,148,63,.1)}
 
 /* Listen */
 .steps{padding-left:1.2rem}
@@ -171,12 +136,7 @@ p{line-height:1.6}
 /* Formular */
 .form label{display:block;font-weight:600;margin:.75rem 0 .35rem}
 .form input,.form select,.form textarea{
-  width:100%;
-  padding:.65rem .75rem;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#fff;
-  font:inherit;
+  width:100%;padding:.65rem .75rem;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit
 }
 .form .two{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
 @media(max-width:640px){.form .two{grid-template-columns:1fr}}
@@ -190,13 +150,95 @@ p{line-height:1.6}
 
 /* Footer */
 .footer{
-  background:linear-gradient(90deg,#FFBB44,#FFF3C4);
-  border-top:1px solid var(--border);
-  margin-top:2rem;
-  border-radius:12px;
+  background:linear-gradient(90deg,#F4BB44,#FFF3C4);
+  border-top:1px solid var(--border);margin-top:2rem;border-radius:12px
 }
 .footer .container{padding:1rem;color:var(--muted)}
 
 /* Bee-Layer */
 #bee-layer { position: fixed; inset: 0; pointer-events: none; z-index: 900; }
 .bee       { position: absolute; width: 34px; height: auto; will-change: transform; }
+
+/* --- Hotspot-Bild mit Hover-Menüs --- */
+.image-hotspots{
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 16px rgba(191,148,63,.12);
+}
+.hotspot-img{ display:block; width:100%; height:auto; }
+
+/* Einzelner Hotspot (Position via inline style top/left in %) */
+.hotspot{ position:absolute; transform: translate(-50%, -50%); }
+
+/* Der Punkt selbst */
+.dot{
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid #ffffff; background: var(--brand);
+  display: grid; place-items: center; cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.dot::after{ content:"+"; font-weight: 800; color: #2B1E0A; line-height: 1; }
+.dot:hover, .hotspot:focus-within .dot{
+  transform: scale(1.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  background: var(--brand-3);
+}
+
+/* Submenü (Popover) */
+.submenu{
+  position: absolute; top: 36px; left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  min-width: 220px; background: #fff; border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: 0 18px 36px rgba(0,0,0,.18);
+  padding: .5rem; opacity: 0; pointer-events: none;
+  transition: opacity .14s ease, transform .14s ease; z-index: 2;
+}
+/* kleiner Pfeil */
+.submenu::before{
+  content:""; position:absolute; top:-8px; left:50%; transform: translateX(-50%);
+  border: 8px solid transparent; border-bottom-color: #fff;
+}
+/* Anzeigen bei Hover/Fokus */
+.hotspot:hover .submenu, .hotspot:focus-within .submenu{
+  opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0);
+}
+/* Links im Untermenü */
+.submenu a{
+  display:block; padding:.55rem .7rem; border-radius: 10px;
+  color: var(--fg); text-decoration: none;
+}
+.submenu a:hover{ background: #FFF0B8; }
+
+/* Screenreader-only Text */
+.sr-only{
+  position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Rote Hotspots für die Karte */
+.dot--red{
+  background: #E02424;           /* Rot */
+  border-color: #fff;
+}
+.dot--red:hover,
+.hotspot:focus-within .dot--red{
+  background: #B91C1C;           /* dunkler beim Hover/Fokus */
+}
+
+/* Submenu-Einträge als Text (ohne Links) */
+.submenu-item{
+  padding:.55rem .7rem;
+  border-radius:10px;
+}
+.submenu-item:hover{
+  background:#FFF0B8;
+}
+
+/* Responsive: Hotspots etwas größer auf Touch */
+@media (max-width: 640px){
+  .dot{ width: 32px; height: 32px; }
+  .submenu{ min-width: 200px; }
+}

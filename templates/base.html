@@ -10,9 +10,9 @@
   <!-- HEADER -->
   <header class="nav">
     <div class="container nav-inner">
-      <!-- Logo statt Text -->
+      <!-- Logo -->
       <a class="brand" href="#home" aria-label="Zur Startseite">
-        <img src="{{ url_for('static', filename='img/honeypot.png') }}" alt="Honig vom Imker" class="logo-img">
+        <img src="{{ url_for('static', filename='img/honeypot.png') }}" alt="" class="logo-img">
       </a>
 
       <button id="menuBtn" class="menu-btn" aria-label="Menü öffnen" aria-controls="menuPanel" aria-expanded="false">☰</button>
@@ -23,9 +23,9 @@
   <aside id="menuPanel" class="menu-panel" aria-hidden="true">
     <nav class="menu-nav">
       <a href="#home" class="menu-link">Start</a>
-      <a href="#why" class="menu-link">Warum Bienen?</a>
-      <a href="#process" class="menu-link">Vom Bienenstock zum Honig</a>
-      <a href="#order" class="menu-link">Honig bestellen</a>
+      <a href="#info" class="menu-link">Entdecke</a>
+      <a href="#process" class="menu-link">Vom Bienenstock</a>
+      <a href="#order" class="menu-link">Bestellen</a>
     </nav>
   </aside>
 
@@ -78,8 +78,6 @@
       let target = 0, current = 0;
 
       function onScroll() {
-        // Begrenzen ist nicht mehr kritisch, weil ::before Bleed hat,
-        // wir halten es aber moderat für sanftes Gefühl
         target = window.scrollY * factor;
       }
       window.addEventListener("scroll", onScroll, {passive:true});
@@ -93,8 +91,39 @@
       }
       raf();
 
-      // Auf Resize neu berechnen
       window.addEventListener("resize", onScroll);
+    })();
+  </script>
+
+  <!-- 🔹 Hotspot-Menüs: Hover/Click/ARIA -->
+  <script>
+    (function(){
+      const hotspots = document.querySelectorAll('.hotspot .dot');
+
+      function closeAll(except){
+        document.querySelectorAll('.hotspot .dot[aria-expanded="true"]').forEach(btn=>{
+          if(btn!==except){ btn.setAttribute('aria-expanded','false'); }
+        });
+      }
+
+      hotspots.forEach(btn=>{
+        // Öffnen per Klick/Touch
+        btn.addEventListener('click', (e)=>{
+          const isOpen = btn.getAttribute('aria-expanded') === 'true';
+          closeAll(btn);
+          btn.setAttribute('aria-expanded', String(!isOpen));
+          e.stopPropagation();
+        });
+
+        // Hover setzt aria-expanded (für Maus)
+        btn.addEventListener('mouseenter', ()=>btn.setAttribute('aria-expanded','true'));
+        btn.addEventListener('mouseleave', ()=>btn.setAttribute('aria-expanded','false'));
+      });
+
+      // Klick außerhalb: alles schließen
+      document.addEventListener('click', (e)=>{
+        if(!e.target.closest('.hotspot')) closeAll();
+      });
     })();
   </script>
 </body>

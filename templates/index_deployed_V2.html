@@ -1,52 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-  <!-- HERO -->
   <section id="home" class="section hero" style="--hero:url('{{ hero_url }}');">
     <div class="hero-content">
       <!-- Logo über dem Text -->
       <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Honig vom Imker" class="hero-logo">
-      <h1>Frischer Honig<br>vom Imker</h1>
-      <p class="hero-sub">Natürlich. Regional. Direkt aus dem Bienenstock.</p>
-      <p><a class="btn" href="#order">Jetzt bestellen →</a></p>
+      <h1>Echter Kärntner Qualitätshonig</h1>
+      <p class="hero-sub">Natürlich. Regional. Direkt aus dem Bienenstock von Andreas Krassnitzer.</p>
+      <p><a class="btn" href="#order">Jetzt anfragen</a></p>
     </div>
   </section>
 
-  <!-- ZWEITE SECTION: Karte mit zwei roten Hotspots -->
-  <section id="info" class="section">
-    <h2>Unsere Standorte</h2>
-
-    <div class="image-hotspots">
-      <!-- Großes Kartenbild -->
-      <img
-        src="{{ url_for('static', filename='img/map.png') }}"
-        alt="Kärnten – Imkerei Standorte Karte"
-        class="hotspot-img"
-        loading="lazy"
-      >
-
-      <!-- Hotspot: mittig links -->
-      <div class="hotspot" style="top: calc(50% + 1cm); left: calc(25% + 10cm);">
-        <button class="dot dot--red" aria-haspopup="true" aria-expanded="false" aria-controls="submenu-winter">
-          <span class="sr-only">Kärntner Winter Standort</span>
-        </button>
-        <div class="submenu" id="submenu-winter" role="menu">
-          <div class="submenu-item" role="menuitem">Kärntner Winter Standort</div>
-        </div>
+  <section id="why" class="section">
+    <h2>Warum Bienen wichtig sind</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Bestäubung</h3>
+        <p>Über 80 % unserer Nutzpflanzen hängen von der Bestäubung durch Bienen ab.</p>
       </div>
-
-      <!-- Hotspot: mittig rechts -->
-      <div class="hotspot" style="top: calc(50% - 1cm); left: 75%;">
-        <button class="dot dot--red" aria-haspopup="true" aria-expanded="false" aria-controls="submenu-sommer">
-          <span class="sr-only">Kärntner Sommer Standort</span>
-        </button>
-        <div class="submenu" id="submenu-sommer" role="menu">
-          <div class="submenu-item" role="menuitem">Kärntner Sommer Standort</div>
-        </div>
+      <div class="card">
+        <h3>Artenvielfalt</h3>
+        <p>Bienen fördern gesunde Ökosysteme und sichern die Vielfalt der Pflanzenwelt.</p>
+      </div>
+      <div class="card">
+        <h3>Umweltindikatoren</h3>
+        <p>Geht es den Bienen gut, geht es auch unserer Umwelt gut – sie reagieren sensibel auf Veränderungen.</p>
       </div>
     </div>
   </section>
 
-  <!-- PROCESS -->
   <section id="process" class="section">
     <h2>Vom Bienenstock zum Honig</h2>
     <ol class="steps">
@@ -57,7 +38,6 @@
     </ol>
   </section>
 
-  <!-- ORDER -->
   <section id="order" class="section">
     <h2>Honig bestellen</h2>
     <form class="card form" method="post" action="{{ url_for('order') }}">
@@ -80,8 +60,8 @@
       <label>Nachricht (optional)
         <textarea name="message" rows="4" placeholder="z. B. Abholung, Geschenkverpackung…"></textarea>
       </label>
-      <button class="btn" type="submit">Verbindlich anfragen</button>
-      <p class="form-hint">Mit Absenden erklärst du dich mit der Verarbeitung deiner Angaben zur Bestellbearbeitung einverstanden.</p>
+      <button class="btn" type="submit">Unverbindlich anfragen</button>
+      <p class="form-hint">Mit Absenden erklärst du dich mit dem verarbeiten deiner Daten einverstanden.</p>
     </form>
   </section>
 {% endblock %}
