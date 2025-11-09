@@ -55,6 +55,7 @@ body::before{
   scroll-margin-top:84px;
   background-color: rgba(255, 249, 230, 0.85);
   border-radius: 12px;
+  margin-bottom: 1cm;   /* ✅ neuer Abstand zwischen den Abschnitten */
 }
 h1,h2,h3{margin:0 0 .6rem}
 p{line-height:1.6}
@@ -62,7 +63,7 @@ p{line-height:1.6}
 /* Header */
 .nav{
   position:sticky;top:0;z-index:1000;
-  background:linear-gradient(90deg,#FFF6D6,#FFE8A3);
+  background:linear-gradient(90deg,#FFF6D6,#FFBB44);
   border-bottom:1px solid var(--border)
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between}
@@ -189,7 +190,7 @@ p{line-height:1.6}
 
 /* Footer */
 .footer{
-  background:linear-gradient(90deg,#FFE8A3,#FFF3C4);
+  background:linear-gradient(90deg,#FFBB44,#FFF3C4);
   border-top:1px solid var(--border);
   margin-top:2rem;
   border-radius:12px;
