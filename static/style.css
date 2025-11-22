@@ -242,3 +242,52 @@ p{line-height:1.6}
   .dot{ width: 32px; height: 32px; }
   .submenu{ min-width: 200px; }
 }
+
+/* PROCESS FLOW BLOCKS */
+.process-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.process-step {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  padding: 1.2rem 1.4rem;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 6px 16px rgba(191, 148, 63, 0.1);
+  text-align: center;
+}
+
+.process-step h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.process-step p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* GESCHWUNGENE S-VERBINDUNG */
+.process-curve {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+}
+
+.process-curve svg {
+  display: block;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .process-curve {
+    height: 70px;
+  }
+}
